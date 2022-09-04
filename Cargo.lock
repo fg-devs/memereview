@@ -703,13 +703,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "entity"
-version = "0.1.0"
-dependencies = [
- "sea-orm",
-]
-
-[[package]]
 name = "event-listener"
 version = "2.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1272,10 +1265,10 @@ version = "0.1.0"
 dependencies = [
  "color-eyre",
  "dotenvy",
- "entity",
  "migration",
  "once_cell",
  "poise",
+ "prost",
  "sea-orm",
  "tokio",
  "tonic",

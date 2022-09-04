@@ -11,7 +11,7 @@ impl MigrationTrait for Migration {
                 Table::create()
                     .table(Users::Table)
                     .if_not_exists()
-                    .col(ColumnDef::new(Users::Id).big_unsigned().not_null().unique_key())
+                    .col(ColumnDef::new(Users::Id).big_unsigned().not_null().primary_key())
                     .col(ColumnDef::new(Users::Muted).boolean().not_null().default(false))
                     .to_owned(),
             )

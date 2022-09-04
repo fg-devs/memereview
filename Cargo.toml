@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [workspace]
-members = [".", "migration", "entity"]
+members = [".", "migration"]
 
 [dependencies]
 color-eyre = "0.6.2"
@@ -19,9 +19,9 @@ tonic = "0.8.0"
 tonic-build = "0.8.0"
 tracing = "0.1.36"
 tracing-subscriber = { version = "0.3.15", features = ["env-filter"] }
+prost = "0.11.0"
 
 migration = { path = "migration" }
-entity = { path = "entity" }
 
 [build-dependencies]
 tonic-build = "0.8.0"

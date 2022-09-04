@@ -1,9 +1,5 @@
 use crate::prelude::{Ctx, Error};
-use entity::files;
-use entity::sea_orm_active_enums::FileType;
 use poise::serenity_prelude::CreateSelectMenuOption;
-use sea_orm::ActiveModelTrait;
-use sea_orm::Set;
 
 #[poise::command(slash_command, prefix_command)]
 pub async fn link(ctx: Ctx<'_>) -> Result<(), Error> {
