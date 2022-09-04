@@ -22,7 +22,7 @@ async fn age(
 pub async fn start(db: DatabaseConnection) -> Res<()> {
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![age(), register(), ping()],
+            commands: vec![age(), register(), ping(), link()],
             ..Default::default()
         })
         .token(env::var("DISCORD_TOKEN").expect("Env DISCORD_TOKEN missing"))

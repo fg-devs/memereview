@@ -2,5 +2,7 @@
 
 pub mod prelude ;
 
+pub mod links ;
+pub mod users ;
 pub mod files ;
 pub mod sea_orm_active_enums ;

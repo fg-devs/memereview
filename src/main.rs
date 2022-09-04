@@ -18,7 +18,7 @@ async fn main() -> Res<()> {
     #[cfg(debug_assertions)]
     dotenv().ok();
 
-    let db = database::connect().await?;
+    let db = database::setup().await?;
 
     bot::start(db).await?;
 

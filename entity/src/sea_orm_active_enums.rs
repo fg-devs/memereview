@@ -2,4 +2,5 @@
 
 use sea_orm :: entity :: prelude :: * ;
 
+# [derive (Debug , Clone , PartialEq , EnumIter , DeriveActiveEnum)] # [sea_orm (rs_type = "String" , db_type = "Enum" , enum_name = "restriction_type")] pub enum RestrictionType { # [sea_orm (string_value = "attachment")] Attachment , # [sea_orm (string_value = "image")] Image , # [sea_orm (string_value = "none")] None , # [sea_orm (string_value = "text")] Text , # [sea_orm (string_value = "video")] Video , }
 # [derive (Debug , Clone , PartialEq , EnumIter , DeriveActiveEnum)] # [sea_orm (rs_type = "String" , db_type = "Enum" , enum_name = "file_type")] pub enum FileType { # [sea_orm (string_value = "image")] Image , # [sea_orm (string_value = "other")] Other , # [sea_orm (string_value = "video")] Video , }
