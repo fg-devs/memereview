@@ -1,9 +1,7 @@
 use dotenvy::dotenv;
-use memereview::bot;
 use memereview::logger;
 use memereview::prelude::Res;
-use sea_orm::Database;
-use std::env;
+use memereview::{bot, database};
 
 #[tokio::main]
 async fn main() -> Res<()> {
@@ -20,7 +18,7 @@ async fn main() -> Res<()> {
     #[cfg(debug_assertions)]
     dotenv().ok();
 
-    let db = Database::connect(env::var("DATABASE_URL").expect("Env DATABASE_URL missing")).await?;
+    let db = database::connect().await?;
 
     bot::start(db).await?;
 

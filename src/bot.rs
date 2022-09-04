@@ -2,9 +2,7 @@ mod commands;
 
 use crate::prelude::{Ctx, Data, Error, Res};
 use commands::*;
-use entity::sea_orm_active_enums::FileType;
 use poise::serenity_prelude as serenity;
-use sea_orm::ActiveValue::Set;
 use sea_orm::DatabaseConnection;
 use std::env;
 use std::sync::Arc;
@@ -22,12 +20,6 @@ async fn age(
 }
 
 pub async fn start(db: DatabaseConnection) -> Res<()> {
-    let file = entity::files::ActiveModel {
-        cdn_uri: Set("https://google.com/".to_owned()),
-        r#type: Set(FileType::Image),
-        ..Default::default()
-    };
-
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
             commands: vec![age(), register(), ping()],
