@@ -20,6 +20,7 @@ RUN apt-get update \
         openssl \
         libssl-dev \
         cmake \
+        protobuf-compiler \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
