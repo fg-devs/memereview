@@ -1,4 +1,5 @@
 mod commands;
+pub mod embeds;
 
 use crate::prelude::{Ctx, Data, Error, Res};
 use commands::*;
