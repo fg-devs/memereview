@@ -1,0 +1,31 @@
+version: "3"
+services:
+  postgres:
+    image: postgres
+    environment:
+      # TODO: Change me
+      POSTGRES_DB: template
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: user
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - service-template
+
+  memereview:
+    build: .
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - memereview
+
+volumes:
+  data:
+
+networks:
+  memereview:
