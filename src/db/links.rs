@@ -14,12 +14,14 @@ impl Db {
         submission_channel_id: ChannelId,
         review_channel_id: ChannelId,
         restriction_type: RestrictionType,
+        anonymous: bool,
     ) -> Res<links::Model> {
         let link = entity::links::ActiveModel {
             created_by: Set(created_by.0 as i64),
             submissions_channel_id: Set(submission_channel_id.0 as i64),
             review_channel_id: Set(review_channel_id.0 as i64),
             restriction_type: Set(restriction_type),
+            anonymous: Set(anonymous),
             ..Default::default()
         };
 

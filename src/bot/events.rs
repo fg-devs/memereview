@@ -1,6 +1,6 @@
 mod message;
 
-use crate::prelude::{Data, Res};
+use crate::prelude::{Data, Error, Res};
 use poise::{serenity_prelude as serenity, Event};
 
 pub struct Handler;

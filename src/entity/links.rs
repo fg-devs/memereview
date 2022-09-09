@@ -14,6 +14,7 @@ pub struct Model {
     pub submissions_channel_id: i64,
     pub review_channel_id: i64,
     pub restriction_type: RestrictionType,
+    pub anonymous: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

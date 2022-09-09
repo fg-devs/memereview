@@ -1,15 +1,36 @@
 version: "3"
 services:
   postgres:
-    image: postgres
+    image: postgres:alpine
     environment:
       POSTGRES_DB: dev
       POSTGRES_PASSWORD: pass
       POSTGRES_USER: user
     volumes:
-      - dev-data:/var/lib/postgresql/data
+      - memereview-dev-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - memereview-dev-net
+
+  attachment-service:
+    image: ghcr.io/fg-devs/attachment-service:latest
+    restart: always
+    environment:
+      - GRPC_PORT=59001
+      - HTTP_PORT=8426
+      - CDN_URI=http://localhost:8426
+    ports:
+      - "59001:59001"
+      - "8426:8426"
+    volumes:
+      - memereview-dev-attachments:/app/files
+    networks:
+      - memereview-dev-net
 
 volumes:
-  dev-data:
+  memereview-dev-data:
+  memereview-dev-attachments:
+
+networks:
+  memereview-dev-net:

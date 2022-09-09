@@ -15,6 +15,7 @@ pub trait CtxExt {
         submission_channel: &Channel,
         review_channel: &Channel,
         restriction: &RestrictionType,
+        anonymous: &bool,
     ) -> Result<ReplyHandle, serenity::Error>;
 }
 
@@ -40,11 +41,14 @@ impl CtxExt for Ctx<'_> {
         submission_channel: &Channel,
         review_channel: &Channel,
         restriction: &RestrictionType,
+        anonymous: &bool,
     ) -> Result<ReplyHandle, serenity::Error> {
         let mut description = String::new();
         description += format!("> Submissions: {}\n", submission_channel).as_str();
         description += format!("> Review: {}\n", review_channel).as_str();
         description += format!("> Restriction: {} {}\n", restriction.emoji(), restriction).as_str();
+        // TODO: Improve looks
+        description += format!("> Anonymous: {}\n", anonymous).as_str();
         description += "\nAre these correct?";
 
         self.send(|m| {

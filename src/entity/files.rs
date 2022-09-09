@@ -12,12 +12,15 @@ pub struct Model {
     pub r#type: FileType,
 }
 
-#[derive(Copy, Clone, Debug, EnumIter)]
-pub enum Relation {}
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {
+    #[sea_orm(has_many = "super::submissions::Entity")]
+    Submissions,
+}
 
-impl RelationTrait for Relation {
-    fn def(&self) -> RelationDef {
-        panic!("No RelationDef")
+impl Related<super::submissions::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Submissions.def()
     }
 }
 

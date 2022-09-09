@@ -5,6 +5,7 @@ use std::env;
 use tracing::{debug, info};
 
 pub mod links;
+mod submissions;
 pub mod users;
 
 pub struct Db {

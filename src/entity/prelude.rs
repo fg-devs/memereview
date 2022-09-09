@@ -2,4 +2,5 @@
 
 pub use super::files::Entity as Files;
 pub use super::links::Entity as Links;
+pub use super::submissions::Entity as Submissions;
 pub use super::users::Entity as Users;

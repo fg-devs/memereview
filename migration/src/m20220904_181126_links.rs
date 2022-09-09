@@ -31,6 +31,7 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Links::RestrictionType).custom(Restriction::Type).not_null(),
                     )
+                    .col(ColumnDef::new(Links::Anonymous).boolean().not_null().default(false))
                     .to_owned(),
             )
             .await?;
@@ -67,4 +68,5 @@ pub(crate) enum Links {
     SubmissionsChannelId,
     ReviewChannelId,
     RestrictionType,
+    Anonymous,
 }

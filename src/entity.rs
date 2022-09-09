@@ -5,4 +5,5 @@ pub mod prelude;
 pub mod files;
 pub mod links;
 pub mod sea_orm_active_enums;
+pub mod submissions;
 pub mod users;

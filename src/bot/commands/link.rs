@@ -34,6 +34,7 @@ pub async fn create(
     #[description = "Restriction for submissions"]
     #[autocomplete = "autocomplete_restriction"]
     restriction: String,
+    #[description = "Anonymous submissions"] anonymous: bool,
 ) -> Result<(), Error> {
     let db = ctx.data().db.as_ref();
     db.add_user(ctx.author().id.0 as i64).await?;
@@ -57,7 +58,9 @@ pub async fn create(
     }
 
     let restriction = restriction_res.unwrap();
-    let reply = ctx.send_link_result(&submission_channel, &review_channel, &restriction).await?;
+    let reply = ctx
+        .send_link_result(&submission_channel, &review_channel, &restriction, &anonymous)
+        .await?;
 
     let interaction = reply
         .message()
@@ -80,7 +83,13 @@ pub async fn create(
     }
 
     let link = db
-        .add_link(ctx.author().id, submission_channel.id(), review_channel.id(), restriction)
+        .add_link(
+            ctx.author().id,
+            submission_channel.id(),
+            review_channel.id(),
+            restriction,
+            anonymous,
+        )
         .await;
 
     let msg = if link.is_ok() {
@@ -99,6 +108,6 @@ pub async fn edit(
     ctx: Ctx<'_>,
     #[description = "Submission channel"] _submission_channel: Channel,
 ) -> Result<(), Error> {
-    ctx.send(|m| m.content("/link edit isn't implemented properly yet").ephemeral(true)).await?;
+    ctx.send(|m| m.content("/link edit isn't implemented yet").ephemeral(true)).await?;
     Ok(())
 }

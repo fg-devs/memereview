@@ -9,3 +9,5 @@ target/
 
 .idea
 files
+.env
+.github

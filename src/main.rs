@@ -1,8 +1,9 @@
 use dotenvy::dotenv;
+use memereview::bot;
 use memereview::db::Db;
 use memereview::logger;
 use memereview::prelude::Res;
-use memereview::{bot, db};
+use memereview::services::attachments::Attachments;
 
 #[tokio::main]
 async fn main() -> Res<()> {
@@ -21,6 +22,9 @@ async fn main() -> Res<()> {
 
     let db = Db::new().await?;
     db.run_migrations().await?;
+
+    let attachments = Attachments::new().await;
+    attachments.set();
 
     bot::start(db).await?;
 

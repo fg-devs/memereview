@@ -4,7 +4,7 @@ mod m20220831_222057_files;
 mod m20220904_180014_restriction;
 mod m20220904_180657_users;
 mod m20220904_181126_links;
-mod m20220909_133340_submissions;
+mod m20220909_144004_submissions;
 
 pub struct Migrator;
 
@@ -16,7 +16,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20220904_180014_restriction::Migration),
             Box::new(m20220904_180657_users::Migration),
             Box::new(m20220904_181126_links::Migration),
-            Box::new(m20220909_133340_submissions::Migration),
+            Box::new(m20220909_144004_submissions::Migration),
         ]
     }
 }
