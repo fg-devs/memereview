@@ -1,13 +1,12 @@
 use crate::entity;
+use crate::entity::links::Entity as Links;
 use crate::entity::sea_orm_active_enums::RestrictionType;
 use crate::extensions::ctx::CtxExt;
 use crate::prelude::{Ctx, Error};
 use futures::{Stream, StreamExt};
 use poise::serenity_prelude::Channel;
-use sea_orm::ActiveModelTrait;
-use sea_orm::ActiveValue::Set;
+use sea_orm::prelude::*;
 use std::str::FromStr;
-use tracing::info;
 
 async fn autocomplete_restriction<'a>(
     _ctx: Ctx<'_>,
@@ -18,8 +17,17 @@ async fn autocomplete_restriction<'a>(
         .map(|name| name)
 }
 
-#[poise::command(slash_command, guild_only)]
-pub async fn link(
+#[poise::command(
+    slash_command,
+    subcommands("create", "edit"),
+    required_permissions = "MANAGE_CHANNELS"
+)]
+pub async fn link(_ctx: Ctx<'_>) -> Result<(), Error> {
+    panic!("WHAT HOW?????? HUH");
+}
+
+#[poise::command(slash_command, guild_only, required_permissions = "MANAGE_CHANNELS")]
+pub async fn create(
     ctx: Ctx<'_>,
     #[description = "Submission channel"] submission_channel: Channel,
     #[description = "Review channel"] review_channel: Channel,
@@ -28,11 +36,17 @@ pub async fn link(
     restriction: String,
 ) -> Result<(), Error> {
     let db = ctx.data().db.as_ref();
-    let usr =
-        entity::users::ActiveModel { id: Set(ctx.author().id.0 as i64), ..Default::default() };
+    db.add_user(ctx.author().id.0 as i64).await?;
 
-    if usr.insert(db).await.is_ok() {
-        info!("Creating user with Id: {}", ctx.author().id)
+    if Links::find()
+        .filter(entity::links::Column::SubmissionsChannelId.eq(submission_channel.id().0))
+        .one(&db.conn)
+        .await?
+        .is_some()
+    {
+        ctx.say(format!("{} is already linked with {}", submission_channel, review_channel))
+            .await?;
+        return Ok(());
     }
 
     let restriction_res = RestrictionType::from_str(restriction.as_str());
@@ -65,26 +79,26 @@ pub async fn link(
         return Ok(());
     }
 
-    let link = entity::links::ActiveModel {
-        created_by: Set(ctx.author().id.0 as i64),
-        submissions_channel_id: Set(submission_channel.id().0 as i64),
-        review_channel_id: Set(review_channel.id().0 as i64),
-        restriction_type: Set(restriction),
-        ..Default::default()
+    let link = db
+        .add_link(ctx.author().id, submission_channel.id(), review_channel.id(), restriction)
+        .await;
+
+    let msg = if link.is_ok() {
+        format!("Created with Id: {}", link.unwrap().id)
+    } else {
+        format!("Something went wrong: {}", submission_channel)
     };
 
-    if let Ok(res) = link.clone().insert(db).await {
-        reply
-            .edit(ctx, |m| m.content(format!("Created with Id: {}", res.id)).components(|b| b))
-            .await?;
-    } else {
-        reply
-            .edit(ctx, |m| {
-                m.content(format!("Link already exists for channel: {}", submission_channel))
-                    .components(|b| b)
-            })
-            .await?;
-    }
+    reply.edit(ctx, |m| m.content(msg).components(|b| b)).await?;
 
+    Ok(())
+}
+
+#[poise::command(slash_command, guild_only, required_permissions = "MANAGE_CHANNELS")]
+pub async fn edit(
+    ctx: Ctx<'_>,
+    #[description = "Submission channel"] _submission_channel: Channel,
+) -> Result<(), Error> {
+    ctx.send(|m| m.content("/link edit isn't implemented properly yet").ephemeral(true)).await?;
     Ok(())
 }

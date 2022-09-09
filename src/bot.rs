@@ -1,29 +1,25 @@
 mod commands;
 pub mod embeds;
+mod events;
 
-use crate::prelude::{Ctx, Data, Error, Res};
+use crate::bot::events::Handler;
+use crate::db::Db;
+use crate::prelude::{Data, Res};
 use commands::*;
 use poise::serenity_prelude as serenity;
-use sea_orm::DatabaseConnection;
 use std::env;
 use std::sync::Arc;
 
-/// Displays your or another user's account creation date
-#[poise::command(slash_command, prefix_command)]
-async fn age(
-    ctx: Ctx<'_>,
-    #[description = "Selected user"] user: Option<serenity::User>,
-) -> Result<(), Error> {
-    let u = user.as_ref().unwrap_or_else(|| ctx.author());
-    let response = format!("{}'s account was created at {}", u.name, u.created_at());
-    ctx.say(response).await?;
-    Ok(())
-}
-
-pub async fn start(db: DatabaseConnection) -> Res<()> {
+pub async fn start(db: Db) -> Res<()> {
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![age(), register(), ping(), link()],
+            commands: vec![register(), ping(), link()],
+            listener: |ctx, event, _framework, data| {
+                Box::pin(async move {
+                    Handler::listener(ctx, event, data).await;
+                    Ok(())
+                })
+            },
             ..Default::default()
         })
         .token(env::var("DISCORD_TOKEN").expect("Env DISCORD_TOKEN missing"))
@@ -32,7 +28,7 @@ pub async fn start(db: DatabaseConnection) -> Res<()> {
             Box::pin(async move { Ok(Data { db: Arc::new(db) }) })
         });
 
-    framework.run().await?;
+    framework.run_autosharded().await?;
 
     Ok(())
 }

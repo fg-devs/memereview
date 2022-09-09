@@ -1,8 +1,8 @@
-use sea_orm::DatabaseConnection;
+use crate::db::Db;
 use std::sync::Arc;
 
 pub struct Data {
-    pub db: Arc<DatabaseConnection>,
+    pub db: Arc<Db>,
 }
 
 pub type Error = color_eyre::eyre::Error;

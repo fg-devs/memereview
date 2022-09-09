@@ -1,7 +1,8 @@
 use dotenvy::dotenv;
+use memereview::db::Db;
 use memereview::logger;
 use memereview::prelude::Res;
-use memereview::{bot, database};
+use memereview::{bot, db};
 
 #[tokio::main]
 async fn main() -> Res<()> {
@@ -18,7 +19,8 @@ async fn main() -> Res<()> {
     #[cfg(debug_assertions)]
     dotenv().ok();
 
-    let db = database::setup().await?;
+    let db = Db::new().await?;
+    db.run_migrations().await?;
 
     bot::start(db).await?;
 

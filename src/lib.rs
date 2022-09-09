@@ -1,5 +1,5 @@
 pub mod bot;
-pub mod database;
+pub mod db;
 pub mod entity;
 pub mod extensions;
 pub mod implementations;
