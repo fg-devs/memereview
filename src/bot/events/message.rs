@@ -3,12 +3,11 @@ use crate::entity;
 use crate::entity::links::Entity as Links;
 use crate::prelude::{Data, Res};
 use crate::services::attachments::Attachments;
-use poise::serenity_prelude::{Context, CreateEmbed, Embed, EmbedVideo, Message};
+use poise::serenity_prelude::{Context, Message};
 use sea_orm::prelude::*;
-use std::borrow::BorrowMut;
 
 impl Handler {
-    pub async fn on_message<'a>(ctx: &'a Context, data: &'a Data, msg: &Message) -> Res<()> {
+    pub async fn on_message<'a>(_ctx: &'a Context, data: &'a Data, msg: &Message) -> Res<()> {
         if msg.author.bot {
             return Ok(());
         }

@@ -65,7 +65,7 @@ pub async fn create(
     let interaction = reply
         .message()
         .await?
-        .await_component_interaction(ctx.discord())
+        .await_component_interaction(ctx.serenity_context())
         .author_id(ctx.author().id)
         .await;
 

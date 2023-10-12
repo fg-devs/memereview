@@ -14,9 +14,9 @@ pub async fn start(db: Db) -> Res<()> {
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
             commands: vec![register(), ping(), link()],
-            listener: |ctx, event, framework, _data| {
+            event_handler: |_ctx, _event, _framework, _data| {
                 Box::pin(async move {
-                    Handler::listener(ctx, event, framework.user_data).await?;
+                    Handler::listener(_ctx, _event, _framework.user_data).await?;
                     Ok(())
                 })
             },
@@ -24,7 +24,7 @@ pub async fn start(db: Db) -> Res<()> {
         })
         .token(env::var("DISCORD_TOKEN")?)
         .intents(GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT)
-        .user_data_setup(move |_ctx, _ready, _framework| {
+        .setup(move |_ctx, _ready, _framework| {
             Box::pin(async move { Ok(Data { db: Arc::new(db) }) })
         });
 
